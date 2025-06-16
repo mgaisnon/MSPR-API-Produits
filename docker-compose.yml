@@ -1,3 +1,5 @@
+version: "3.8"
+
 services:
   produits-api:
     build:
@@ -11,6 +13,7 @@ services:
       - db-produits
     networks:
       - payetonkawa-network
+
   db-produits:
     image: mysql:8.0
     environment:
@@ -22,8 +25,10 @@ services:
       - produits_data:/var/lib/mysql
     networks:
       - payetonkawa-network
+
 networks:
   payetonkawa-network:
     driver: bridge
+
 volumes:
   produits_data:
