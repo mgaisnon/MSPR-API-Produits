@@ -2,7 +2,7 @@ name: Build & Push Docker Image – Produits API
 
 on:
   push:
-    branches: [main]
+    branches: ["*"]
 
 jobs:
   docker:
