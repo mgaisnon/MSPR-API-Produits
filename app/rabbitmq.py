@@ -7,6 +7,10 @@ RABBITMQ_URL = os.getenv("RABBITMQ_URL")
 def publish_event(event_type: str, data: dict):
     connection = pika.BlockingConnection(pika.URLParameters(RABBITMQ_URL))
     channel = connection.channel()
-    channel.queue_declare(queue='products_events', durable=True)
-    channel.basic_publish(exchange='', routing_key='products_events', body=json.dumps({'type': event_type, 'data': data}))
+    exchange_name = 'products_exchange'
+    queue_name = 'products_events'
+    channel.exchange_declare(exchange=exchange_name, exchange_type='fanout', durable=True)
+    channel.queue_declare(queue=queue_name, durable=True)
+    channel.queue_bind(queue=queue_name, exchange=exchange_name)
+    channel.basic_publish(exchange=exchange_name, routing_key='', body=json.dumps({'type': event_type, 'data': data}))
     connection.close()

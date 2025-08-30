@@ -17,22 +17,21 @@ def init_data():
         existing = db.query(models.Product).filter(models.Product.name == item['name']).first()
         if not existing:
             try:
-                price_str = item['details']['price'].replace(',', '.')
-                price = float(price_str)
+                price = float(item['price'])
             except (KeyError, ValueError):
                 continue
-            
+
             try:
                 stock = int(item['stock']) if item['stock'] != "rupture" else 0
             except (KeyError, ValueError):
                 stock = 0
-            
+
             product_data = schemas.ProductCreate(
                 name=item['name'],
-                description=item['details']['description'],
+                description=item['description'],
                 price=price,
                 stock=stock,
-                origin=item['details']['color']
+                origin=item['origin']
             )
             crud.create_product(db, product_data)
     db.close()
