@@ -27,6 +27,10 @@ def verify_api_key(x_api_key: str = Header(None)):
     if x_api_key != API_KEY:
         raise HTTPException(status_code=403, detail="Clé API invalide")
 
+@app.get("/")
+def read_root():
+    return {"message": "Bienvenue dans l'API produits."}
+
 @app.get("/products/", response_model=list[schemas.Product])
 def read_products(skip: int = 0, limit: int = 100, db: Session = Depends(get_db), _ = Depends(verify_api_key)):
     products = crud.get_products(db, skip=skip, limit=limit)
